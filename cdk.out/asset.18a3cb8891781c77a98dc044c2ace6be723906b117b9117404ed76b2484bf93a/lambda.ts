@@ -1,4 +1,4 @@
-exports.handler = async (_event: any) => {
+async function handler(_event: any) {
     try {
         // Your logic here
         console.log("Handler function executed successfully");
@@ -13,4 +13,7 @@ exports.handler = async (_event: any) => {
             body: JSON.stringify({ message: "Internal server error" })
         };
     }
-};
+}
+
+// Export the handler function
+module.exports.handler = handler;

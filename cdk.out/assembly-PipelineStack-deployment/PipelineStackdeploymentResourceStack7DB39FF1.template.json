@@ -38,9 +38,10 @@
    "Type": "AWS::Lambda::Function",
    "Properties": {
     "Code": {
-     "ZipFile": "\n            // Define the handler function\n            async function handler(event) {\n                try {\n                    // Your logic here\n                    console.log(\"Handler function executed successfully\");\n                    return {\n                        statusCode: 200,\n                        body: JSON.stringify({ message: \"Handler function executed successfully\" })\n                    };\n                } catch (error) {\n                    console.error(\"Error occurred in handler function:\", error);\n                    return {\n                        statusCode: 500,\n                        body: JSON.stringify({ message: \"Internal server error\" })\n                    };\n                }\n            }\n            \n            // Export the handler function\n            module.exports.handler = handler;            \n        "
+     "S3Bucket": "cdk-hnb659fds-assets-339713131596-us-east-1",
+     "S3Key": "18a3cb8891781c77a98dc044c2ace6be723906b117b9117404ed76b2484bf93a.zip"
     },
-    "Handler": "index.handler",
+    "Handler": "lambda.handler",
     "Role": {
      "Fn::GetAtt": [
       "LambdaFunctionServiceRoleC555A460",
@@ -54,7 +55,10 @@
     "LambdaFunctionServiceRoleC555A460"
    ],
    "Metadata": {
-    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/LambdaFunction/Resource"
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/LambdaFunction/Resource",
+    "aws:asset:path": "../asset.18a3cb8891781c77a98dc044c2ace6be723906b117b9117404ed76b2484bf93a",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
    }
   },
   "MyStateMachineRoleD59FFEBC": {
@@ -318,7 +322,7 @@
   "CDKMetadata": {
    "Type": "AWS::CDK::Metadata",
    "Properties": {
-    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WO3W6DMAyFn6X3ISvc7Ho/mjSp1Sp4gMoNLnWBBGGnCEV594mfafTK37GPj53pNHvV+x0MnJiyThq66FAImFrBwOfQQHspQYcvb42Qs+rjard8wr4lZnI2KoJWh9w1OA3menINmXH2zRQVC3bXdZ/PAlyzPsw3vu3D1fhs0KHwxiCWqhAQPIK5kZ3jtzoq6KgCwQFGHXJkeeto/mHFT+waN7ZoZepuVCFQ/cVVqHJk53uD78D/Yg1a+Ihyc+XUWijGJ9+Pl87LdiMq60rUd355ZHudpjrd3Zko6b0ValHnS/0F0I1wyocBAAA="
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/11P0W7CMAz8Ft6DR8vDnmHTJKShofYDKpOaYtomFXZAVdV/nxpAq/Z0d/b5ckkhSd9htcC7LG1ZLxs+wpAr2trgXYqhwfZYIgxfwVll78zHyc35ga4ti7B3o2FsYch8Q9Mi4sE3bPvoi2w0si5QhFRgM4GRNWyDrUm3KGREqTs906VQlFrgOzbYuZuv/xlgyIO1RKXJFZX2aM/s4uNzPRrsuEKlO/YwZCS66Tg2fNJP6hrft+R0ms5Urli94ioyGYkPV0ux6Us8gx58T3r25TR6sHH888XvTkHsqsnxE7QLOj8fjfMlwUXebukKkgSSxUWYl9fglFuC7IG/seVq57IBAAA="
    },
    "Metadata": {
     "aws:cdk:path": "PipelineStack/deployment/ResourceStack/CDKMetadata/Default"
