@@ -2081,7 +2081,7 @@
                             },
                             "source": {
                               "type": "CODEPIPELINE",
-                              "buildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"install\": {\n      \"commands\": [\n        \"npm install -g cdk-assets@2\"\n      ]\n    },\n    \"build\": {\n      \"commands\": [\n        \"cdk-assets --path \\\"assembly-PipelineStack-testing/PipelineStacktestingResourceStack46ED9183.assets.json\\\" --verbose publish \\\"18a3cb8891781c77a98dc044c2ace6be723906b117b9117404ed76b2484bf93a:339713131596-us-east-1\\\"\"\n      ]\n    }\n  }\n}"
+                              "buildSpec": "{\n  \"version\": \"0.2\",\n  \"phases\": {\n    \"install\": {\n      \"commands\": [\n        \"npm install -g cdk-assets@2\"\n      ]\n    },\n    \"build\": {\n      \"commands\": [\n        \"cdk-assets --path \\\"assembly-PipelineStack-testing/PipelineStacktestingResourceStack46ED9183.assets.json\\\" --verbose publish \\\"360f79a6935a6720893e9d81c832ac8b8f1d5ecfb35cfea16887e55b8dbe3938:339713131596-us-east-1\\\"\"\n      ]\n    }\n  }\n}"
                             }
                           }
                         },
@@ -2211,7 +2211,7 @@
                           "aws:cdk:cloudformation:props": {
                             "code": {
                               "s3Bucket": "cdk-hnb659fds-assets-339713131596-us-east-1",
-                              "s3Key": "18a3cb8891781c77a98dc044c2ace6be723906b117b9117404ed76b2484bf93a.zip"
+                              "s3Key": "360f79a6935a6720893e9d81c832ac8b8f1d5ecfb35cfea16887e55b8dbe3938.zip"
                             },
                             "handler": "lambda.handler",
                             "role": {
@@ -2812,7 +2812,7 @@
                           "aws:cdk:cloudformation:props": {
                             "code": {
                               "s3Bucket": "cdk-hnb659fds-assets-339713131596-us-east-1",
-                              "s3Key": "18a3cb8891781c77a98dc044c2ace6be723906b117b9117404ed76b2484bf93a.zip"
+                              "s3Key": "360f79a6935a6720893e9d81c832ac8b8f1d5ecfb35cfea16887e55b8dbe3938.zip"
                             },
                             "handler": "lambda.handler",
                             "role": {

@@ -12,7 +12,7 @@ export class MyLambdaStack extends cdk.Stack {
         super(scope, id, props);
         
         const shellLambda = new Function(this, 'LambdaFunction', {
-            code: lambda.Code.fromAsset(path.resolve(__dirname, "lambdas")),
+            code: lambda.Code.fromAsset(path.resolve(__dirname)),
             runtime: lambda.Runtime.NODEJS_18_X,
             handler: "lambda.handler",
             timeout: cdk.Duration.seconds(3)

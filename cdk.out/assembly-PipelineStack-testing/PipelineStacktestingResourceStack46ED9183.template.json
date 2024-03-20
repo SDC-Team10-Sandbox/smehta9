@@ -39,7 +39,7 @@
    "Properties": {
     "Code": {
      "S3Bucket": "cdk-hnb659fds-assets-339713131596-us-east-1",
-     "S3Key": "18a3cb8891781c77a98dc044c2ace6be723906b117b9117404ed76b2484bf93a.zip"
+     "S3Key": "360f79a6935a6720893e9d81c832ac8b8f1d5ecfb35cfea16887e55b8dbe3938.zip"
     },
     "Handler": "lambda.handler",
     "Role": {
@@ -56,7 +56,7 @@
    ],
    "Metadata": {
     "aws:cdk:path": "PipelineStack/testing/ResourceStack/LambdaFunction/Resource",
-    "aws:asset:path": "../asset.18a3cb8891781c77a98dc044c2ace6be723906b117b9117404ed76b2484bf93a",
+    "aws:asset:path": "../asset.360f79a6935a6720893e9d81c832ac8b8f1d5ecfb35cfea16887e55b8dbe3938",
     "aws:asset:is-bundled": false,
     "aws:asset:property": "Code"
    }
