@@ -1,0 +1,408 @@
+{
+ "Resources": {
+  "LambdaFunctionServiceRoleC555A460": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/LambdaFunction/ServiceRole/Resource"
+   }
+  },
+  "LambdaFunctionBF21E41F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "ZipFile": "\n            // Define the handler function\n            async function handler(event) {\n                try {\n                    // Your logic here\n                    console.log(\"Handler function executed successfully\");\n                    return {\n                        statusCode: 200,\n                        body: JSON.stringify({ message: \"Handler function executed successfully\" })\n                    };\n                } catch (error) {\n                    console.error(\"Error occurred in handler function:\", error);\n                    return {\n                        statusCode: 500,\n                        body: JSON.stringify({ message: \"Internal server error\" })\n                    };\n                }\n            }\n            \n            // Export the handler function\n            module.exports.handler = handler;            \n        "
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "LambdaFunctionServiceRoleC555A460",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x",
+    "Timeout": 3
+   },
+   "DependsOn": [
+    "LambdaFunctionServiceRoleC555A460"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/LambdaFunction/Resource"
+   }
+  },
+  "MyStateMachineRoleD59FFEBC": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "states.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/MyStateMachine/Role/Resource"
+   }
+  },
+  "MyStateMachineRoleDefaultPolicyE468EB18": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "LambdaFunctionBF21E41F",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "LambdaFunctionBF21E41F",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "MyStateMachineRoleDefaultPolicyE468EB18",
+    "Roles": [
+     {
+      "Ref": "MyStateMachineRoleD59FFEBC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/MyStateMachine/Role/DefaultPolicy/Resource"
+   }
+  },
+  "MyStateMachine6C968CA5": {
+   "Type": "AWS::StepFunctions::StateMachine",
+   "Properties": {
+    "DefinitionString": {
+     "Fn::Join": [
+      "",
+      [
+       "{\"StartAt\":\"MyLambdaTask\",\"States\":{\"MyLambdaTask\":{\"Next\":\"GreetedWorld\",\"Retry\":[{\"ErrorEquals\":[\"Lambda.ClientExecutionTimeoutException\",\"Lambda.ServiceException\",\"Lambda.AWSLambdaException\",\"Lambda.SdkClientException\"],\"IntervalSeconds\":2,\"MaxAttempts\":6,\"BackoffRate\":2}],\"Type\":\"Task\",\"Resource\":\"arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":states:::lambda:invoke\",\"Parameters\":{\"FunctionName\":\"",
+       {
+        "Fn::GetAtt": [
+         "LambdaFunctionBF21E41F",
+         "Arn"
+        ]
+       },
+       "\",\"Payload.$\":\"$\"}},\"GreetedWorld\":{\"Type\":\"Succeed\"}}}"
+      ]
+     ]
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "MyStateMachineRoleD59FFEBC",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "MyStateMachineRoleDefaultPolicyE468EB18",
+    "MyStateMachineRoleD59FFEBC"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/MyStateMachine/Resource"
+   }
+  },
+  "MyLambdaApiECBB5D4B": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Description": "This is an example API for Lambda integration",
+    "Name": "My Lambda API"
+   },
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/MyLambdaApi/Resource"
+   }
+  },
+  "MyLambdaApiDeploymentAB15D94Da1e94b6e84c858475a08d9accb6d15fa": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "This is an example API for Lambda integration",
+    "RestApiId": {
+     "Ref": "MyLambdaApiECBB5D4B"
+    }
+   },
+   "DependsOn": [
+    "MyLambdaApimyresourceGETE55E8646",
+    "MyLambdaApimyresource0F0F96BA"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/MyLambdaApi/Deployment/Resource"
+   }
+  },
+  "MyLambdaApiDeploymentStageprodE1FA4BF9": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "MyLambdaApiDeploymentAB15D94Da1e94b6e84c858475a08d9accb6d15fa"
+    },
+    "RestApiId": {
+     "Ref": "MyLambdaApiECBB5D4B"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/MyLambdaApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "MyLambdaApimyresource0F0F96BA": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "MyLambdaApiECBB5D4B",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "myresource",
+    "RestApiId": {
+     "Ref": "MyLambdaApiECBB5D4B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/MyLambdaApi/Default/myresource/Resource"
+   }
+  },
+  "MyLambdaApimyresourceGETApiPermissionPipelineStackdeploymentResourceStackMyLambdaApi33E41974GETmyresourceD898CAC9": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdaFunctionBF21E41F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:339713131596:",
+       {
+        "Ref": "MyLambdaApiECBB5D4B"
+       },
+       "/",
+       {
+        "Ref": "MyLambdaApiDeploymentStageprodE1FA4BF9"
+       },
+       "/GET/myresource"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/MyLambdaApi/Default/myresource/GET/ApiPermission.PipelineStackdeploymentResourceStackMyLambdaApi33E41974.GET..myresource"
+   }
+  },
+  "MyLambdaApimyresourceGETApiPermissionTestPipelineStackdeploymentResourceStackMyLambdaApi33E41974GETmyresource155DD1F1": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "LambdaFunctionBF21E41F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:aws:execute-api:us-east-1:339713131596:",
+       {
+        "Ref": "MyLambdaApiECBB5D4B"
+       },
+       "/test-invoke-stage/GET/myresource"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/MyLambdaApi/Default/myresource/GET/ApiPermission.Test.PipelineStackdeploymentResourceStackMyLambdaApi33E41974.GET..myresource"
+   }
+  },
+  "MyLambdaApimyresourceGETE55E8646": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "LambdaFunctionBF21E41F",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "MyLambdaApimyresource0F0F96BA"
+    },
+    "RestApiId": {
+     "Ref": "MyLambdaApiECBB5D4B"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/MyLambdaApi/Default/myresource/GET/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WO3W6DMAyFn6X3ISvc7Ho/mjSp1Sp4gMoNLnWBBGGnCEV594mfafTK37GPj53pNHvV+x0MnJiyThq66FAImFrBwOfQQHspQYcvb42Qs+rjard8wr4lZnI2KoJWh9w1OA3menINmXH2zRQVC3bXdZ/PAlyzPsw3vu3D1fhs0KHwxiCWqhAQPIK5kZ3jtzoq6KgCwQFGHXJkeeto/mHFT+waN7ZoZepuVCFQ/cVVqHJk53uD78D/Yg1a+Ihyc+XUWijGJ9+Pl87LdiMq60rUd355ZHudpjrd3Zko6b0ValHnS/0F0I1wyocBAAA="
+   },
+   "Metadata": {
+    "aws:cdk:path": "PipelineStack/deployment/ResourceStack/CDKMetadata/Default"
+   }
+  }
+ },
+ "Outputs": {
+  "MyLambdaApiEndpoint00B4B38E": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "MyLambdaApiECBB5D4B"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "MyLambdaApiDeploymentStageprodE1FA4BF9"
+      },
+      "/"
+     ]
+    ]
+   }
+  },
+  "ApiEndpoint": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "MyLambdaApiECBB5D4B"
+      },
+      ".execute-api.us-east-1.",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "MyLambdaApiDeploymentStageprodE1FA4BF9"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

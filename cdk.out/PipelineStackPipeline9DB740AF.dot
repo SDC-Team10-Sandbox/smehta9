@@ -1,0 +1,55 @@
+digraph G {
+  # Arrows represent an "unlocks" relationship (opposite of dependency). So chosen
+  # because the layout looks more natural that way.
+  # To represent subgraph dependencies, subgraphs are represented by BEGIN/END nodes.
+  # To render: `dot -Tsvg PipelineStackPipeline9DB740AF.dot > graph.svg`, open in a browser.
+  node [shape="box"];
+"BEGIN Build" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END Build" [shape="cds", style="filled", fillcolor="#b7deff"];
+"Build.Synth";
+"Source.SDC-Team10-Sandbox/smehta9" -> "Build.Synth";
+"BEGIN Build" -> "Build.Synth";
+"Build.Synth" -> "END Build";
+"BEGIN UpdatePipeline" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END UpdatePipeline" [shape="cds", style="filled", fillcolor="#b7deff"];
+"UpdatePipeline.SelfMutate";
+"Build.Synth" -> "UpdatePipeline.SelfMutate";
+"BEGIN UpdatePipeline" -> "UpdatePipeline.SelfMutate";
+"UpdatePipeline.SelfMutate" -> "END UpdatePipeline";
+"BEGIN testing" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END testing" [shape="cds", style="filled", fillcolor="#b7deff"];
+"UpdatePipeline.SelfMutate" -> "BEGIN testing";
+"BEGIN testing.ResourceStack" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END testing.ResourceStack" [shape="cds", style="filled", fillcolor="#b7deff"];
+"testing.ResourceStack.Deploy";
+"testing.ResourceStack.Prepare" -> "testing.ResourceStack.Deploy";
+"testing.ResourceStack.Prepare";
+"Build.Synth" -> "testing.ResourceStack.Prepare";
+"BEGIN testing.ResourceStack" -> "testing.ResourceStack.Prepare";
+"testing.ResourceStack.Deploy" -> "END testing.ResourceStack";
+"testing.Run Tests";
+"END testing.ResourceStack" -> "testing.Run Tests";
+"BEGIN testing" -> "BEGIN testing.ResourceStack";
+"testing.Run Tests" -> "END testing";
+"BEGIN deployment" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END deployment" [shape="cds", style="filled", fillcolor="#b7deff"];
+"UpdatePipeline.SelfMutate" -> "BEGIN deployment";
+"END testing" -> "BEGIN deployment";
+"BEGIN deployment.ResourceStack" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END deployment.ResourceStack" [shape="cds", style="filled", fillcolor="#b7deff"];
+"deployment.ResourceStack.Deploy";
+"deployment.ResourceStack.Prepare" -> "deployment.ResourceStack.Deploy";
+"deployment.ResourceStack.Prepare";
+"Build.Synth" -> "deployment.ResourceStack.Prepare";
+"BEGIN deployment.ResourceStack" -> "deployment.ResourceStack.Prepare";
+"deployment.ResourceStack.Deploy" -> "END deployment.ResourceStack";
+"deployment.Deployment";
+"END deployment.ResourceStack" -> "deployment.Deployment";
+"BEGIN deployment" -> "BEGIN deployment.ResourceStack";
+"deployment.Deployment" -> "END deployment";
+"BEGIN Source" [shape="cds", style="filled", fillcolor="#b7deff"];
+"END Source" [shape="cds", style="filled", fillcolor="#b7deff"];
+"Source.SDC-Team10-Sandbox/smehta9";
+"BEGIN Source" -> "Source.SDC-Team10-Sandbox/smehta9";
+"Source.SDC-Team10-Sandbox/smehta9" -> "END Source";
+}

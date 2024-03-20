@@ -1,0 +1,144 @@
+{
+  "version": "36.0.0",
+  "artifacts": {
+    "PipelineStackdeploymentResourceStack7DB39FF1.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "PipelineStackdeploymentResourceStack7DB39FF1.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "PipelineStackdeploymentResourceStack7DB39FF1": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://339713131596/us-east-1",
+      "properties": {
+        "templateFile": "PipelineStackdeploymentResourceStack7DB39FF1.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": true,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::339713131596:role/cdk-hnb659fds-deploy-role-339713131596-us-east-1",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::339713131596:role/cdk-hnb659fds-cfn-exec-role-339713131596-us-east-1",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-339713131596-us-east-1/70e3c1f9bb2bbfd6feb045284b416449962b3fd6d2cd2f2e00b64e4ca3ecc584.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "PipelineStackdeploymentResourceStack7DB39FF1.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::339713131596:role/cdk-hnb659fds-lookup-role-339713131596-us-east-1",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        },
+        "stackName": "deployment-ResourceStack"
+      },
+      "dependencies": [
+        "PipelineStackdeploymentResourceStack7DB39FF1.assets"
+      ],
+      "metadata": {
+        "/PipelineStack/deployment/ResourceStack/LambdaFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LambdaFunctionServiceRoleC555A460"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/LambdaFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "LambdaFunctionBF21E41F"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/MyStateMachine/Role/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyStateMachineRoleD59FFEBC"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/MyStateMachine/Role/DefaultPolicy/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyStateMachineRoleDefaultPolicyE468EB18"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/MyStateMachine/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyStateMachine6C968CA5"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/MyLambdaApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyLambdaApiECBB5D4B"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/MyLambdaApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyLambdaApiDeploymentAB15D94Da1e94b6e84c858475a08d9accb6d15fa"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/MyLambdaApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyLambdaApiDeploymentStageprodE1FA4BF9"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/MyLambdaApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyLambdaApiEndpoint00B4B38E"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/MyLambdaApi/Default/myresource/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyLambdaApimyresource0F0F96BA"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/MyLambdaApi/Default/myresource/GET/ApiPermission.PipelineStackdeploymentResourceStackMyLambdaApi33E41974.GET..myresource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyLambdaApimyresourceGETApiPermissionPipelineStackdeploymentResourceStackMyLambdaApi33E41974GETmyresourceD898CAC9"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/MyLambdaApi/Default/myresource/GET/ApiPermission.Test.PipelineStackdeploymentResourceStackMyLambdaApi33E41974.GET..myresource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyLambdaApimyresourceGETApiPermissionTestPipelineStackdeploymentResourceStackMyLambdaApi33E41974GETmyresource155DD1F1"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/MyLambdaApi/Default/myresource/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "MyLambdaApimyresourceGETE55E8646"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/ApiEndpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "ApiEndpoint"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/PipelineStack/deployment/ResourceStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "PipelineStack/deployment/ResourceStack"
+    }
+  }
+}

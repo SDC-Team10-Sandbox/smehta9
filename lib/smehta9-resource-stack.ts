@@ -5,19 +5,16 @@ import * as sfn from 'aws-cdk-lib/aws-stepfunctions';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as tasks from 'aws-cdk-lib/aws-stepfunctions-tasks';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
+import path = require('path');
 
 export class MyLambdaStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
         
         const shellLambda = new Function(this, 'LambdaFunction', {
-            code: lambda.Code.fromInline(`
-            exports.handler = (event, context, callback) => {
-                callback(null, "Hello World!");
-            };
-        `),
-        runtime: lambda.Runtime.NODEJS_18_X,
-        handler: "index.handler",
+            code: lambda.Code.fromAsset(path.resolve(__dirname, 'lambda')),
+            runtime: lambda.Runtime.NODEJS_18_X,
+            handler: "handler",
             timeout: cdk.Duration.seconds(3)
         });
 
